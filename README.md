@@ -7,7 +7,7 @@ This project was used to explore Android Studio as well as HCI concepts such as 
   
 <img width="194" alt="buttons" src="https://user-images.githubusercontent.com/64673976/144129396-aa744f09-15c4-40aa-af0b-9c743f37c65e.PNG">
 
-    For the buttons I made sure to include alt text for scrren readers, vibrant colors to make them easy to see, as well as high contrast text and recognizable images for each function. The buttons also greyed out and were unclickable when the color wheel was being used, which is shown in the gifs below.
+   For the buttons I made sure to include alt text for screen readers, vibrant colors to make them easy to see, as well as high contrast text and recognizable images for each function. The buttons also greyed out and were unclickable when the color wheel was being used, which is shown in the gifs below.
 
 ### Color wheel
   The color wheel snaps back to the last position it was on when the user's finger moves off the wheel.
@@ -22,8 +22,21 @@ This project was used to explore Android Studio as well as HCI concepts such as 
   
   To be able to know if the mouse in inside or outside the wheel I needed to use essential geometry to calculate where exactly the color wheel was. Since different phones have different size screens, the color wheel needed to be able to grow and shrink to accomodate that. Therefore the location of the color wheel changed and whether or not a certain pixel coordinate was inside or outside the wheel changed as well. Even when that was calculated and the mouse was determined to be inside the wheel I needed to calculate exactly what color it was on. This calculation was based on the angle from the center of the wheel and determined what color was used when the user released the mouse and where the selecting circle (the smaller circle that shows what color you have selected) is. 
   
-  I also worked with event listeners to change the color of the brush once a color is selected.
+  I also worked with event listeners to change the color of the brush once a color is selected. A callback updates the color of the brush whenever the color selector is called inside the color picker view. This updates the application layer without having to access any public fields or functions from the color picker view itself. The listeners are then unregistered when the application is killed.
+  
+### Saving state of the application
+
+The application is killed when the user switches focus to another app and Android kills the Activity. Undo uses a bundle to save the state of the application when this happens. Then when the user switches back to focus on Undo the bundle restores the previous state of the application, including the undo/redo stack so that they user can continue where they left off. 
+
+![save state](https://user-images.githubusercontent.com/64673976/145094291-abf5e0a3-2d3a-4c79-bae3-6babdff06f53.gif)
 
 ### Undo and redo features along with an eraser to help correct errors
-  
-  [gif using undo/redo]
+
+The last usability feature I would like to showcase here is the undo/redo functions. 
+
+![undo redo final](https://user-images.githubusercontent.com/64673976/145094473-616f293e-7234-4e2f-9920-36b73903d553.gif)
+
+Each change the user makes to the canvas is stored as an Action that can be reversed and then subsequently restored. These Actions include making a stroke, changing the color or thickness of the brush, selecting the eraser, and making a stroke with the eraser. This feature is implemented through a pair of stacks – undo and redo. When a user makes a change, it is put on the undo stack, when that change is reversed that Action is put on the redo stack. When the user makes a new change after undoing an Action the redo stack is cleared so they can no longer redo the Action that has just been undone. Currently, these stacks have a capacity of 10 to save space but, if the user has the suitable storage that number can be increased. 
+
+## Conclusion
+In conclusion, this application is made with accessibility in mind, as should all applications. Although this drawing app is geared towards those with sight loss, the features highlighted here also aid people with other disabilities such as tremors that might make drawing hard as well, all at no cost to able bodied people. This goes to show that accessibility is something that we should incorporate into every piece of code we write.  It doesn’t just make life easier for people who are disabled (which should be a good enough reason itself) but you also learn more and make an even better end product. 
